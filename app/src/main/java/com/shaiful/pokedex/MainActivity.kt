@@ -18,8 +18,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.shaiful.pokedex.navigation.RouteNames
+import com.shaiful.pokedex.screens.pokemon_list.PokemonListScreen
 import com.shaiful.pokedex.ui.theme.PokedexTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +34,7 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = RouteNames.startDestination) {
 
                     composable(RouteNames.pokemonListScreen) {
-
+                        PokemonListScreen(navController = navController)
                     }
 
                     composable(

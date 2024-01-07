@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    kotlin("kapt")
-    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -32,17 +32,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
     packaging {
         resources {
@@ -72,15 +72,15 @@ dependencies {
     // Retrofit for networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:4.9.2")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
     // Timber for logging
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     // Coroutine
-    implementation("org,jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutine-android:1.4.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0-RC2")
 
     // Coroutine lifecycle scope
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
@@ -88,18 +88,20 @@ dependencies {
 
 
     // Coil for network image
-    implementation("io.coil-kt:coil:1.1.1")
-    implementation("com.google.accomplishment:accomplishment-coil:0.7.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     // Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
+    implementation("com.google.dagger:hilt-android:2.49")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
-    implementation("androidx:hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
-    kapt("androidx.hilt:hilt-compiler:1.1.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("androidx.hilt:hilt-work:1.1.0")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+//    implementation("androidx:hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
+    kapt("androidx.hilt:hilt-compiler:1.2.0-alpha01")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0-alpha01")
+//    implementation("androidx.hilt:hilt-navigation-fragment:1.2.0-alpha01")
 
     /// Color utils library
-    implementation("com.androidx.support:palette-v7:28.0.0")
+    implementation("androidx.palette:palette-ktx:1.0.0")
 
 }
 
