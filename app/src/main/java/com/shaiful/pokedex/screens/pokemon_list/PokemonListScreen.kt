@@ -44,7 +44,7 @@ fun PokemonListScreen(
             ){
 
             }
-            Spacer(modifier = Modifier.padding(16.dp))
+            Spacer(modifier = Modifier.padding(4.dp))
             PokemonListCompo(navController = navController)
         }
     }
