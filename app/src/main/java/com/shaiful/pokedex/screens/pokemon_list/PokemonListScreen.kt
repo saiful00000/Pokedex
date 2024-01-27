@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.shaiful.pokedex.R
+import com.shaiful.pokedex.screens.pokemon_list.composables.PokemonListCompo
 import com.shaiful.pokedex.screens.pokemon_list.composables.SearchBar
 
 @Composable
@@ -43,6 +44,8 @@ fun PokemonListScreen(
             ){
 
             }
+            Spacer(modifier = Modifier.padding(16.dp))
+            PokemonListCompo(navController = navController)
         }
     }
 }

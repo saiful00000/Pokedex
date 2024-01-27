@@ -3,6 +3,7 @@ package com.shaiful.pokedex.screens.pokemon_list.viewmodels
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.capitalize
@@ -15,6 +16,7 @@ import com.shaiful.pokedex.screens.pokemon_list.models.PokemonListEntry
 import com.shaiful.pokedex.util.ResData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.Locale
 import javax.inject.Inject
 
@@ -31,6 +33,10 @@ class PokemonListViewModel @Inject constructor(
     var isLoading = mutableStateOf(false)
     var endReached = mutableStateOf(false)
 
+    init {
+        loadPokemonPaginated()
+    }
+
     fun loadPokemonPaginated() {
         viewModelScope.launch {
 
@@ -42,7 +48,7 @@ class PokemonListViewModel @Inject constructor(
             )
 
             when (result) {
-                is ResData.Error -> {
+                is ResData.Success -> {
                     endReached.value = currentPage * perPage >= result.data!!.count
 
                     val pokemonEntries = result.data.results.mapIndexed { index, entry ->
@@ -61,14 +67,16 @@ class PokemonListViewModel @Inject constructor(
 
                     }
 
+                    Timber.tag("Pkemon list from api").i(pokemonEntries.size.toString());
+
                     currentPage ++;
                     loadError.value = ""
                     isLoading.value = false
 
                     pokemonList.value += pokemonEntries
                 }
-                is ResData.Success -> {
-                    loadError.value = result.message!!
+                is ResData.Error -> {
+                    loadError.value = result.message ?: ""
                     isLoading.value = false
                 }
 

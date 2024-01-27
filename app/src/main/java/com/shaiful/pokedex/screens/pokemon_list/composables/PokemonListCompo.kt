@@ -1,10 +1,10 @@
 package com.shaiful.pokedex.screens.pokemon_list.composables
 
-import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,8 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.Coil
-import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.shaiful.pokedex.navigation.RouteNames
@@ -41,31 +40,58 @@ import com.shaiful.pokedex.screens.pokemon_list.models.PokemonListEntry
 import com.shaiful.pokedex.screens.pokemon_list.viewmodels.PokemonListViewModel
 
 @Composable
-fun PokemonListCompo() {
+fun PokemonListCompo(
+    navController: NavController,
+    pokemonListViewModel: PokemonListViewModel = hiltViewModel()
+) {
+    val pokemonList by remember { pokemonListViewModel.pokemonList }
+    val endReached by remember { pokemonListViewModel.endReached }
+    val loadError by remember { pokemonListViewModel.loadError }
+    val isLoading by remember { pokemonListViewModel.isLoading }
+
+    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+        val itemCount = if(pokemonList.size % 2 == 0) {
+            pokemonList.size / 2
+        } else {
+            pokemonList.size / 2 + 1
+        }
+        items(itemCount) {
+            if(it >= itemCount - 1 && !endReached) {
+                pokemonListViewModel.loadPokemonPaginated()
+            }
+            PokedexRow(rowIndex = it, entries = pokemonList, navController = navController)
+        }
+    }
+
+
+
+
+
+
 
 }
 
 @Composable
-fun PokemonListItemRowRow(
-    entryIndex: Int,
+fun PokedexRow(
+    rowIndex: Int,
     entries: List<PokemonListEntry>,
-    navController: NavController,
+    navController: NavController
 ) {
     Column {
         Row {
             PokemonListEntryCompo(
-                entry = entries[entryIndex * 2],
+                entry = entries[rowIndex * 2],
                 navController = navController,
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(16.dp))
-            if(entries.size >= entryIndex * 2 + 2) {
+            if(entries.size >= rowIndex * 2 + 2) {
                 PokemonListEntryCompo(
-                    entry = entries[entryIndex * 2 + 1],
+                    entry = entries[rowIndex * 2 + 1],
                     navController = navController,
                     modifier = Modifier.weight(1f)
                 )
-            }else {
+            } else {
                 Spacer(modifier = Modifier.weight(1f))
             }
         }
@@ -87,10 +113,11 @@ fun PokemonListEntryCompo(
 
    Box (
        contentAlignment = Alignment.Center,
-       modifier = Modifier
+       modifier = modifier
            .shadow(5.dp, RoundedCornerShape(10.dp))
            .clip(RoundedCornerShape(10.dp))
            .aspectRatio(1f)
+           .width(100.dp)
            .background(
                Brush.verticalGradient(
                    colors = listOf(dominantColor, defaultDominantColor)
@@ -106,11 +133,11 @@ fun PokemonListEntryCompo(
            AsyncImage(
                model = ImageRequest.Builder(LocalContext.current)
                    .data(entry.imageUrl)
-                   .target {
-                       pokemonListViewModel.calcDominantColor(it) {color ->
-                           dominantColor = color
-                       }
-                   }
+//                   .target() {
+//                       pokemonListViewModel.calcDominantColor(it) {color ->
+//                           dominantColor = color
+//                       }
+//                   }
                    .crossfade(true)
                    .build(),
                contentDescription = "entry_pokemon_image",
