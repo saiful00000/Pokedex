@@ -10,9 +10,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -49,25 +53,36 @@ fun PokemonListCompo(
     val loadError by remember { pokemonListViewModel.loadError }
     val isLoading by remember { pokemonListViewModel.isLoading }
 
-    LazyColumn(contentPadding = PaddingValues(16.dp)) {
-        val itemCount = if(pokemonList.size % 2 == 0) {
-            pokemonList.size / 2
-        } else {
-            pokemonList.size / 2 + 1
-        }
-        items(itemCount) {
-            if(it >= itemCount - 1 && !endReached) {
+//    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+//        val itemCount = if(pokemonList.size % 2 == 0) {
+//            pokemonList.size / 2
+//        } else {
+//            pokemonList.size / 2 + 1
+//        }
+//        items(itemCount) {
+//            if(it >= itemCount - 1 && !endReached) {
+//                pokemonListViewModel.loadPokemonPaginated()
+//            }
+//            PokedexRow(rowIndex = it, entries = pokemonList, navController = navController)
+//        }
+//    }
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(8.dp)
+    ) {
+        items(pokemonList.size) {
+
+            if (it >= pokemonList.size - 1 && !endReached) {
                 pokemonListViewModel.loadPokemonPaginated()
             }
-            PokedexRow(rowIndex = it, entries = pokemonList, navController = navController)
+
+            PokemonListEntryCompo(
+                entry = pokemonList[it],
+                navController = navController
+            )
         }
     }
-
-
-
-
-
-
 
 }
 
@@ -85,7 +100,7 @@ fun PokedexRow(
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(16.dp))
-            if(entries.size >= rowIndex * 2 + 2) {
+            if (entries.size >= rowIndex * 2 + 2) {
                 PokemonListEntryCompo(
                     entry = entries[rowIndex * 2 + 1],
                     navController = navController,
@@ -111,46 +126,47 @@ fun PokemonListEntryCompo(
         mutableStateOf(defaultDominantColor)
     }
 
-   Box (
-       contentAlignment = Alignment.Center,
-       modifier = modifier
-           .shadow(5.dp, RoundedCornerShape(10.dp))
-           .clip(RoundedCornerShape(10.dp))
-           .aspectRatio(1f)
-           .width(100.dp)
-           .background(
-               Brush.verticalGradient(
-                   colors = listOf(dominantColor, defaultDominantColor)
-               )
-           )
-           .clickable {
-               navController.navigate(
-                   "${RouteNames.pokemonDetailScreen}/${dominantColor.toArgb()}/${entry.pokemonName}"
-               )
-           }
-   ){
-       Column {
-           AsyncImage(
-               model = ImageRequest.Builder(LocalContext.current)
-                   .data(entry.imageUrl)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .padding(8.dp)
+            .shadow(5.dp, RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(10.dp))
+            .aspectRatio(1f)
+            .width(100.dp)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(dominantColor, defaultDominantColor)
+                )
+            )
+            .clickable {
+                navController.navigate(
+                    "${RouteNames.pokemonDetailScreen}/${dominantColor.toArgb()}/${entry.pokemonName}"
+                )
+            }
+    ) {
+        Column {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(entry.imageUrl)
 //                   .target() {
 //                       pokemonListViewModel.calcDominantColor(it) {color ->
 //                           dominantColor = color
 //                       }
 //                   }
-                   .crossfade(true)
-                   .build(),
-               contentDescription = "entry_pokemon_image",
-               modifier = Modifier
-                   .size(120.dp)
-                   .align(Alignment.CenterHorizontally)
-           )
-           Text(
-               text = entry.pokemonName,
-               fontSize = 20.sp,
-               textAlign = TextAlign.Center,
-               modifier = Modifier.fillMaxWidth()
-           )
-       }
-   }
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "entry_pokemon_image",
+                modifier = Modifier
+                    .size(120.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+            Text(
+                text = entry.pokemonName,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
 }

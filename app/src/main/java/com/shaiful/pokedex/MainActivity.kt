@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.shaiful.pokedex.navigation.RouteNames
+import com.shaiful.pokedex.screens.pokemon_details.composables.PokemonDetailScreen
 import com.shaiful.pokedex.screens.pokemon_list.PokemonListScreen
 import com.shaiful.pokedex.ui.theme.PokedexTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,7 +58,10 @@ class MainActivity : ComponentActivity() {
                             it.arguments?.getString("pokemonName")
                         }
 
-                        /// return the screen composable
+                        PokemonDetailScreen(
+                            navController = navController,
+                            pokemonName = pokemonName
+                        )
 
                     }
                 }
