@@ -26,7 +26,7 @@ class PokemonListViewModel @Inject constructor(
     /*
     * Pokemon list related fields
     * */
-    private val perPage = 10
+    private val perPage = 40
     private var currentPage = 0
 
     var pokemonList = mutableStateOf<List<PokemonListEntry>>(emptyList())
