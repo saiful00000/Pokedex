@@ -34,28 +34,17 @@ fun PokemonTypeDropDownCompo(
     var selectedItem: PokemonType? by remember { mutableStateOf(null) }
     var expanded by remember { mutableStateOf(false) }
 
-//    BasicTextField(
-//        value = TextFieldValue(selectedItem?.type ?: "N/A"),
-//        onValueChange = {},
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(16.dp)
-//            .clickable {
-//                expanded = true
-//            }
-//    )
-
     OutlinedTextField(
         value = selectedItem?.type ?: "Select Type",
         onValueChange = {  },
         modifier = Modifier
+            .padding(16.dp)
             .fillMaxWidth()
             .onGloballyPositioned { coordinates ->
                 // This value is used to assign to
                 // the DropDown the same width
                 //mTextFieldSize = coordinates.size.toSize()
             },
-        label = {Text("Label")},
         trailingIcon = {
             Icon(Icons.Default.KeyboardArrowDown,"contentDescription",
                 Modifier.clickable { expanded = !expanded })
@@ -75,6 +64,7 @@ fun PokemonTypeDropDownCompo(
                 },
                 onClick = {
                     expanded = false
+                    selectedItem = type
                 }
             )
         }
