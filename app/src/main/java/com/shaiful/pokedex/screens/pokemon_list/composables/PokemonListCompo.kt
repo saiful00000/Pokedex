@@ -39,6 +39,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.shaiful.pokedex.composables.ErrorCompo
+import com.shaiful.pokedex.composables.LoadingCompo
 import com.shaiful.pokedex.navigation.RouteNames
 import com.shaiful.pokedex.screens.pokemon_list.models.PokemonListEntry
 import com.shaiful.pokedex.screens.pokemon_list.viewmodels.PokemonListViewModel
@@ -46,44 +48,37 @@ import com.shaiful.pokedex.screens.pokemon_list.viewmodels.PokemonListViewModel
 @Composable
 fun PokemonListCompo(
     navController: NavController,
-    pokemonListViewModel: PokemonListViewModel = hiltViewModel()
+    pokemonListViewModel: PokemonListViewModel
 ) {
     val pokemonList by remember { pokemonListViewModel.pokemonList }
     val endReached by remember { pokemonListViewModel.endReached }
     val loadError by remember { pokemonListViewModel.loadError }
     val isLoading by remember { pokemonListViewModel.isLoading }
 
-//    LazyColumn(contentPadding = PaddingValues(16.dp)) {
-//        val itemCount = if(pokemonList.size % 2 == 0) {
-//            pokemonList.size / 2
-//        } else {
-//            pokemonList.size / 2 + 1
-//        }
-//        items(itemCount) {
-//            if(it >= itemCount - 1 && !endReached) {
-//                pokemonListViewModel.loadPokemonPaginated()
-//            }
-//            PokedexRow(rowIndex = it, entries = pokemonList, navController = navController)
-//        }
-//    }
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(8.dp)
-    ) {
-        items(pokemonList.size) {
 
-            if (it >= pokemonList.size - 1 && !endReached) {
-                pokemonListViewModel.loadPokemonPaginated()
+    if(isLoading) {
+        LoadingCompo(message = "Pokemons loading...")
+    } else if (loadError.isNotEmpty()) {
+        ErrorCompo(message = loadError)
+    } else {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(8.dp)
+        ) {
+            items(pokemonList.size) {
+
+                if (it >= pokemonList.size - 1 && !endReached) {
+                    pokemonListViewModel.loadPokemonPaginated()
+                }
+
+                PokemonListEntryCompo(
+                    entry = pokemonList[it],
+                    navController = navController
+                )
             }
-
-            PokemonListEntryCompo(
-                entry = pokemonList[it],
-                navController = navController
-            )
         }
     }
-
 }
 
 @Composable
