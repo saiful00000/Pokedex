@@ -27,8 +27,7 @@ fun PokemonListScreen(
     pokemonListViewModel: PokemonListViewModel = hiltViewModel()
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.background,
-        modifier = Modifier.fillMaxSize()
+        color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize()
     ) {
         Column {
             Spacer(modifier = Modifier.height(20.dp))

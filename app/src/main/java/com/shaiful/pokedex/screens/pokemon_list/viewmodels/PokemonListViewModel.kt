@@ -126,4 +126,8 @@ class PokemonListViewModel @Inject constructor(
         }
     }
 
+    fun filterByPokemonType(type: PokemonType) {
+
+    }
+
 }
