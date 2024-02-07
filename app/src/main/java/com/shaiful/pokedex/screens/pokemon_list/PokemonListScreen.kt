@@ -33,26 +33,7 @@ fun PokemonListScreen(
         color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize()
     ) {
         Column {
-            Spacer(modifier = Modifier.height(20.dp))
-
-//            Image(
-//                painter = painterResource(id = R.drawable.ic_international_pok_mon_logo),
-//                contentDescription = "Pokemon",
-//                modifier = Modifier
-//                    .height(56.dp)
-//                    .fillMaxWidth()
-//            )
-//            SearchBar(
-//                hint = "Search...",
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(16.dp)
-//            ){
-//
-//            }
-//            PokemonTypeDropDownCompo(pokemonListViewModel = pokemonListViewModel)
             MainAppBar(navController = navController)
-            Spacer(modifier = Modifier.padding(4.dp))
             PokemonListCompo(
                 navController = navController,
                 pokemonListViewModel = pokemonListViewModel,
