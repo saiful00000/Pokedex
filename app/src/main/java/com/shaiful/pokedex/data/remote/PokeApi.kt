@@ -6,6 +6,7 @@ import com.shaiful.pokedex.data.remote.responses.pokemon_types.PokemonTypeRespon
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.Objects
 
 interface PokeApi {
 
@@ -22,5 +23,10 @@ interface PokeApi {
 
     @GET("type")
     suspend fun getPokemonTypes() : PokemonTypeResponse
+
+    @GET("type/{name}")
+    suspend fun getPokemonTypeDetail(
+        @Path("name") name: String
+    ) : Map<String, Objects>
 
 }

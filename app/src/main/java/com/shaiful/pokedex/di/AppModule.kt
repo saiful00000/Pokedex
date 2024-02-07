@@ -28,9 +28,6 @@ object AppModule {
     ) = PokemonRepository(api)
 
 
-
-
-
     /*
     * Pokemon api/retrofit provider
     * */

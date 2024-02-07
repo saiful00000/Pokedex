@@ -34,15 +34,8 @@ class PokemonListViewModel @Inject constructor(
     var isLoading = mutableStateOf(true)
     var endReached = mutableStateOf(false)
 
-    /*
-    * Pokemon type related fields
-    * */
-    var pokemonTypeList = mutableStateOf<List<PokemonType>>(emptyList())
-    var isTypesLoading = mutableStateOf(true)
-
     init {
         loadPokemonPaginated()
-        loadPokemonTypes()
     }
 
     fun loadPokemonPaginated() {
@@ -91,31 +84,6 @@ class PokemonListViewModel @Inject constructor(
         }
     }
 
-    private fun loadPokemonTypes() {
-        viewModelScope.launch {
-
-            val result = pokemonRepository.getPokemonTypes()
-            isTypesLoading.value = false
-
-            when (result) {
-                is ResData.Success -> {
-                    val types = result.data?.results?.mapIndexed{ _, type ->
-                        PokemonType(
-                            type = type.name,
-                            url = type.url
-                        )
-                    }
-
-                    pokemonTypeList.value += types ?: emptyList()
-                }
-                is ResData.Error -> {}
-                is ResData.Loading -> {}
-            }
-
-            isTypesLoading.value = false
-        }
-    }
-
     fun calcDominantColor (drawable: Drawable, onFinish: (Color) -> Unit) {
         val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
@@ -124,10 +92,6 @@ class PokemonListViewModel @Inject constructor(
                 onFinish(Color(colorValue))
             }
         }
-    }
-
-    fun filterByPokemonType(type: PokemonType) {
-
     }
 
 }
