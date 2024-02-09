@@ -53,7 +53,9 @@ fun TypeListEntryCompo(
             .width(100.dp)
             .background(color = Color.White)
             .clickable {
-
+                navController.navigate(
+                    "${RouteNames.pokemonTypeDetailsScreen}/${type.type}"
+                )
             }
     ) {
         Column (

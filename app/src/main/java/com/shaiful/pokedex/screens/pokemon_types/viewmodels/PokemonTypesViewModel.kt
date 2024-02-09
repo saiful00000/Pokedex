@@ -3,6 +3,7 @@ package com.shaiful.pokedex.screens.pokemon_types.viewmodels
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shaiful.pokedex.data.remote.responses.pokemon_type_details.PokemonTypeDetails
 import com.shaiful.pokedex.repository.PokemonRepository
 import com.shaiful.pokedex.screens.pokemon_list.models.PokemonType
 import com.shaiful.pokedex.util.ResData
@@ -20,6 +21,8 @@ class PokemonTypesViewModel @Inject constructor(
     * */
     var pokemonTypeList = mutableStateOf<List<PokemonType>>(emptyList())
     var isTypesLoading = mutableStateOf(true)
+    var pokemonTypeDetails = mutableStateOf<PokemonTypeDetails?>(null)
+    val isTypeDetailsLoading = mutableStateOf(true)
 
     init {
         loadPokemonTypes()
@@ -47,6 +50,26 @@ class PokemonTypesViewModel @Inject constructor(
             }
 
             isTypesLoading.value = false
+        }
+    }
+
+    fun loadPokemonTypeDetail(pokemonType: String) {
+        viewModelScope.launch {
+
+            isTypeDetailsLoading.value = true;
+
+            val result = pokemonRepository.getTypeDetail(pokemonType)
+
+            when (result) {
+                is ResData.Success -> {
+                    pokemonTypeDetails.value = result.data
+                }
+                is ResData.Error -> {}
+                is ResData.Loading -> {}
+            }
+
+            isTypeDetailsLoading.value = false;
+
         }
     }
 

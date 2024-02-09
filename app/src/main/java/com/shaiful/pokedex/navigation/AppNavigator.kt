@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.shaiful.pokedex.screens.pokemon_details.composables.PokemonDetailScreen
 import com.shaiful.pokedex.screens.pokemon_list.PokemonListScreen
+import com.shaiful.pokedex.screens.pokemon_types.PokemonTypeDetailsScreen
 import com.shaiful.pokedex.screens.pokemon_types.PokemonTypesScreen
 
 @Composable
@@ -51,6 +52,21 @@ fun AppNavigator() {
 
         composable(RouteNames.pokemonTypesScreen) {
             PokemonTypesScreen(navController = navController)
+        }
+
+        composable(
+            RouteNames.pokemonTypeDetailsScreen + "/{typeName}",
+            arguments = listOf(
+                navArgument("typeName") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            val typeName = remember {
+                it.arguments?.getString("typeName")
+            }
+
+            PokemonTypeDetailsScreen(navController = navController, pokemonType = typeName ?: "")
         }
     }
 }

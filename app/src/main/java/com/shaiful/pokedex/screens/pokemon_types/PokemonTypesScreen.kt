@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -30,7 +29,7 @@ fun PokemonTypesScreen(
     val typeLoading by remember { pokemonTypesViewModel.isTypesLoading }
 
     Scaffold(
-        topBar = { CommonAppBar(title = "All Types", navCController = navController) }
+        topBar = { CommonAppBar(title = "All Types", navController = navController) }
     ) {
 
         if (typeLoading) {
