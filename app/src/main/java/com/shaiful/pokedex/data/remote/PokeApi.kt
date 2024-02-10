@@ -27,6 +27,6 @@ interface PokeApi {
     @GET("type/{name}")
     suspend fun getPokemonTypeDetail(
         @Path("name") name: String
-    ) : Map<String, Objects>
+    ) : Map<String, *>
 
 }

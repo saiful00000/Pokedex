@@ -9,6 +9,7 @@ import com.shaiful.pokedex.screens.pokemon_list.models.PokemonType
 import com.shaiful.pokedex.util.ResData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,8 +22,6 @@ class PokemonTypesViewModel @Inject constructor(
     * */
     var pokemonTypeList = mutableStateOf<List<PokemonType>>(emptyList())
     var isTypesLoading = mutableStateOf(true)
-    var pokemonTypeDetails = mutableStateOf<PokemonTypeDetails?>(null)
-    val isTypeDetailsLoading = mutableStateOf(true)
 
     init {
         loadPokemonTypes()
@@ -50,26 +49,6 @@ class PokemonTypesViewModel @Inject constructor(
             }
 
             isTypesLoading.value = false
-        }
-    }
-
-    fun loadPokemonTypeDetail(pokemonType: String) {
-        viewModelScope.launch {
-
-            isTypeDetailsLoading.value = true;
-
-            val result = pokemonRepository.getTypeDetail(pokemonType)
-
-            when (result) {
-                is ResData.Success -> {
-                    pokemonTypeDetails.value = result.data
-                }
-                is ResData.Error -> {}
-                is ResData.Loading -> {}
-            }
-
-            isTypeDetailsLoading.value = false;
-
         }
     }
 

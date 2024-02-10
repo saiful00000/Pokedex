@@ -157,7 +157,7 @@ fun PokemonListEntryCompo(
                     .align(Alignment.CenterHorizontally)
             )
             Text(
-                text = entry.pokemonName,
+                text = entry.pokemonName.replaceFirstChar { it.uppercaseChar() },
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()

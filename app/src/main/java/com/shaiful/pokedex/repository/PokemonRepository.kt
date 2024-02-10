@@ -9,6 +9,7 @@ import com.shaiful.pokedex.data.remote.responses.pokemon_types.PokemonTypeRespon
 import com.shaiful.pokedex.screens.pokemon_list.models.PokemonListEntry
 import com.shaiful.pokedex.util.ResData
 import dagger.hilt.android.scopes.ActivityScoped
+import timber.log.Timber
 import java.util.Objects
 import javax.inject.Inject
 
@@ -57,13 +58,23 @@ class PokemonRepository @Inject constructor(
 
             //
             // parse pokmons from type details json
-            val pokemonJsonList = response["pokemon"] as? List<Map<String, Any>>
+            val pokemonJsonList = response["pokemon"] as? List<Map<String, *>>
 
             val pokemonList = pokemonJsonList?.map {
-                val pokemonInfo = it["pokemon"] as? Map<String, Any>
+                val pokemonInfo = it["pokemon"] as? Map<String, *>
+                val url = (pokemonInfo?.get("url") as? String?) ?: "";
+
+                val number = if(url.endsWith("/")) {
+                    url.dropLast(1).takeLastWhile { it.isDigit() }
+                } else {
+                    url.takeLastWhile { it.isDigit() }
+                }
+
+                val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
+
                 PokemonListEntry(
                     number = (it["slot"] as? Int?) ?: 0,
-                    imageUrl = (pokemonInfo?.get("url") as? String?) ?: "",
+                    imageUrl = imageUrl,
                     pokemonName = (pokemonInfo?.get("name") as? String?) ?: "",
                 )
             }?.toList() ?: emptyList()
@@ -85,6 +96,7 @@ class PokemonRepository @Inject constructor(
                 moveList = moveList,
             )
         } catch (e: Exception) {
+            Timber.e(e)
             return ResData.Error(message = e.toString())
         }
 
